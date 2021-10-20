@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/ozonmp/omp-bot/internal/app/commands/loyalty"
 	"log"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -25,7 +26,7 @@ type Router struct {
 	// delivery
 	// recommendation
 	// travel
-	// loyalty
+	loyaltyCommander Commander
 	// bank
 	// subscription
 	// license
@@ -60,7 +61,7 @@ func NewRouter(
 		// delivery
 		// recommendation
 		// travel
-		// loyalty
+		loyaltyCommander: loyalty.NewLoyaltyCommander(bot),
 		// bank
 		// subscription
 		// license
@@ -120,7 +121,7 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	case "travel":
 		break
 	case "loyalty":
-		break
+		c.loyaltyCommander.HandleCallback(callback, callbackPath)
 	case "bank":
 		break
 	case "subscription":
@@ -191,7 +192,7 @@ func (c *Router) handleMessage(msg *tgbotapi.Message) {
 	case "travel":
 		break
 	case "loyalty":
-		break
+		c.loyaltyCommander.HandleCommand(msg, commandPath)
 	case "bank":
 		break
 	case "subscription":
